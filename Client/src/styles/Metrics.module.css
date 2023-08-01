@@ -1,0 +1,6 @@
+.container {
+  padding-left: 0.5rem;
+  min-height: 100vh;
+  word-break: break-all;
+  white-space: pre-wrap;
+}
