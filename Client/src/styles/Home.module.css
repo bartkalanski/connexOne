@@ -1,7 +1,7 @@
 .main {
   display: flex;
   justify-content: space-between;
-  align-items: start;
+  align-items: flex-start;
   padding: 1.5rem;
   min-height: 100vh;
   width: 90%;

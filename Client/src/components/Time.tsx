@@ -2,6 +2,17 @@ import { fetchTime } from '@/services/timeService'
 import React, { useEffect, useState } from 'react'
 import styles from '@/styles/Time.module.css'
 
+const formatTime = (seconds: number): string => {
+  const hours = Math.floor(seconds / 3600)
+  const minutes = Math.floor((seconds % 3600) / 60)
+  const remainingSeconds = seconds % 60
+
+  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(
+    2,
+    '0'
+  )}:${String(remainingSeconds).padStart(2, '0')}`
+}
+
 export default function Time() {
   const [timeData, setTimeData] = useState<number | undefined>(undefined)
   const [timeDifference, setTimeDifference] = useState(0)
@@ -12,10 +23,8 @@ export default function Time() {
       try {
         setIsLoading(true)
         const response = await fetchTime()
-        console.log(`time response`, response)
-        setTimeData(response?.epoch) // Assuming your API response data is in the 'data' property
+        setTimeData(response?.epoch)
       } catch (error) {
-        // Handle errors here
         console.error('Error fetching time data:', error)
       } finally {
         setIsLoading(false)
@@ -25,12 +34,9 @@ export default function Time() {
 
     const interval = setInterval(getTimeData, 30000)
 
-    // Cleanup the interval when the component unmounts
     return () => clearInterval(interval)
   }, [])
-  console.log(`timeData`, timeData)
 
-  // Update the time difference every second
   useEffect(() => {
     const interval = setInterval(() => {
       const clientTimeInSeconds = Math.floor(Date.now() / 1000)
@@ -39,18 +45,6 @@ export default function Time() {
 
     return () => clearInterval(interval)
   }, [timeData])
-
-  // Function to format seconds into HH:mm:ss format
-  const formatTime = (seconds: number): string => {
-    const hours = Math.floor(seconds / 3600)
-    const minutes = Math.floor((seconds % 3600) / 60)
-    const remainingSeconds = seconds % 60
-
-    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(
-      2,
-      '0'
-    )}:${String(remainingSeconds).padStart(2, '0')}`
-  }
 
   if (isLoading) {
     return <div>Loading</div>
